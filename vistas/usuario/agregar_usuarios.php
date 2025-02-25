@@ -13,35 +13,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cedula = $_POST['cedula'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role_id = $_POST['role_id'];
-    $user_role = $_SESSION['role_id']; // Rol del usuario que está creando el cobrador
+    $user_role = $_SESSION['role_id']; // Rol del usuario que está creando el usuario
 
-    // 🚀 Si el usuario es un Administrador, usa la cuenta activa
-    if ($user_role == 1) {
-        $id_cuenta = $_SESSION['id_cuenta'];
-    } elseif ($user_role == 18) {
-        // 🚀 Si el usuario es un Gestor, obtiene la cuenta seleccionada
-        $id_admin = $_POST['id_admin'];
-        $id_cuenta = $_POST['id_cuenta'];
+    // 🚀 Validar la creación de usuarios según el rol del creador
+    if ($user_role == 18) { 
+        // 🚀 Gestor puede crear Administradores y Cobradores
+        if ($role_id == 1) {
+            $id_cuenta = null; // Un Administrador no necesita cuenta al crearse
+        } elseif ($role_id == 2) {
+            $id_admin = $_POST['id_admin'];
+            $id_cuenta = $_POST['id_cuenta'];
 
-        // Validar que el administrador y la cuenta coincidan en la BD
-        $sql = "SELECT id_cuenta FROM cuenta_admin WHERE id_admin = ? AND id_cuenta = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ii", $id_admin, $id_cuenta);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            // 🚀 Validar que la cuenta seleccionada pertenece al administrador elegido
+            $sql = "SELECT id_cuenta FROM cuenta_admin WHERE id_admin = ? AND id_cuenta = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ii", $id_admin, $id_cuenta);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        if ($result->num_rows == 0) {
-            $_SESSION['response'] = ['status' => 'error', 'message' => 'El administrador y la cuenta seleccionados no coinciden.'];
-            header("Location: agregar_usuario.php");
+            if ($result->num_rows == 0) {
+                $_SESSION['response'] = ['status' => 'error', 'message' => 'El administrador y la cuenta seleccionados no coinciden.'];
+                header("Location: agregar_usuarios.php");
+                exit();
+            }
+        } else {
+            $_SESSION['response'] = ['status' => 'error', 'message' => 'Solo puedes crear administradores o cobradores.'];
+            header("Location: agregar_usuarios.php");
             exit();
         }
+
+    } elseif ($user_role == 1) { 
+        // 🚀 Administrador solo puede crear Cobradores y Clientes
+        if ($role_id == 2) {
+            $id_cuenta = $_SESSION['id_cuenta']; // 🚀 Cobradores se asocian a su cuenta automáticamente
+        } elseif ($role_id == 3) {
+            $id_cuenta = null; // 🚀 Clientes no tienen cuenta asignada
+        } else {
+            $_SESSION['response'] = ['status' => 'error', 'message' => 'Solo puedes crear cobradores o clientes.'];
+            header("Location: agregar_usuarios.php");
+            exit();
+        }
+
+    } elseif ($user_role == 2) {
+        // 🚀 Cobrador solo puede crear Clientes
+        if ($role_id != 3) {
+            $_SESSION['response'] = ['status' => 'error', 'message' => 'Solo puedes crear clientes.'];
+            header("Location: agregar_usuarios.php");
+            exit();
+        }
+        $id_cuenta = null;
     } else {
-        $_SESSION['response'] = ['status' => 'error', 'message' => 'No tienes permisos para crear cobradores.'];
-        header("Location: agregar_usuario.php");
+        $_SESSION['response'] = ['status' => 'error', 'message' => 'No tienes permisos para agregar este usuario.'];
+        header("Location: agregar_usuarios.php");
         exit();
     }
 
-    // Verificar si la cédula ya está registrada
+    // 🚀 Verificar si la cédula ya está registrada
     $sql = "SELECT id_user FROM user WHERE cedula = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $cedula);
@@ -49,37 +76,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $errores['cedula'] = 'Esta cédula ya está registrada como usuario.';
-    } else {
-        try {
-            $conn->begin_transaction();
+        $_SESSION['response'] = ['status' => 'error', 'message' => 'Esta cédula ya está registrada.'];
+        header("Location: agregar_usuarios.php");
+        exit();
+    }
 
-            // 1️⃣ Insertar usuario con id_cuenta
-            $sql = "INSERT INTO user (nombre, apellido, contacto, cedula, password, id_cuenta) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssssi", $nombre, $apellido, $contacto, $cedula, $password, $id_cuenta);
-            $stmt->execute();
-            $user_id = $conn->insert_id;
+    // 🚀 Insertar el usuario con su cuenta asignada
+    try {
+        $conn->begin_transaction();
 
-            // 2️⃣ Asignar rol de Cobrador
-            $sql = "INSERT INTO rol_user (id_user, id_rol) VALUES (?, ?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ii", $user_id, $role_id);
-            $stmt->execute();
+        $sql = "INSERT INTO user (nombre, apellido, contacto, cedula, password, id_cuenta) 
+                VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssssi", $nombre, $apellido, $contacto, $cedula, $password, $id_cuenta);
+        $stmt->execute();
+        $user_id = $conn->insert_id;
 
-            $conn->commit();
-            $_SESSION['response'] = ['status' => 'success', 'message' => 'Usuario cobrador registrado exitosamente.'];
-        } catch (Exception $e) {
-            $conn->rollback();
-            $_SESSION['response'] = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()];
-        }
+        // 🚀 Asignar rol
+        $sql = "INSERT INTO rol_user (id_user, id_rol) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ii", $user_id, $role_id);
+        $stmt->execute();
+
+        $conn->commit();
+        $_SESSION['response'] = ['status' => 'success', 'message' => 'Usuario registrado exitosamente.'];
+    } catch (Exception $e) {
+        $conn->rollback();
+        $_SESSION['response'] = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()];
     }
 
     header("Location: agregar_usuarios.php");
     exit();
 }
 ?>
+
+
 
 
 
@@ -144,10 +175,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 
+
 <body>
     <div class="container">
         <div class="form-container">
-            <h1>Agregar Usuario</h1>
+            <h1 class="mb-4">Agregar Usuario</h1>
             <?php
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
@@ -172,47 +204,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ?>
 
             <form action="agregar_usuarios.php" method="POST">
-                <h3>Datos del Usuario</h3>
-                <label>Nombre:</label>
-                <input type="text" name="nombre" required>
+                <h3 class="mb-4">Datos del Usuario</h3>
 
-                <label>Apellido:</label>
-                <input type="text" name="apellido" required>
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" class="form-control" required>
+                </div>
 
-                <label>Contacto:</label>
-                <input type="text" name="contacto" required>
+                <div class="form-group">
+                    <label>Apellido:</label>
+                    <input type="text" name="apellido" class="form-control" required>
+                </div>
 
-                <label>Cédula:</label>
-                <input type="text" name="cedula" required>
+                <div class="form-group">
+                    <label for="contacto">Contacto:</label>
+                    <input type="text" class="form-control" name="contacto" required>
+                </div>
 
-                <label>Contraseña:</label>
-                <input type="password" name="password" required>
+                <div class="form-group">
+                    <label for="cedula">Cédula</label>
+                    <input type="text" class="form-control" id="cedula" name="cedula" required>
+                </div>
 
-                <label>Rol:</label>
-                <select name="role_id" required>
-                    <option value="2">Cobrador</option>
-                </select>
+                <div class="form-group">
+                    <label for="contrasena">Contraseña:</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
 
                 <?php if ($user_role == 18): ?>
-                    <!-- 🚀 Si el usuario es un Gestor, debe elegir el Administrador y su cuenta -->
-                    <label>Seleccionar Administrador:</label>
-                    <select name="id_admin" id="id_admin" required>
-                        <option value="">Seleccionar...</option>
-                        <?php foreach ($administradores as $admin): ?>
-                            <option value="<?= $admin['id_user'] ?>" data-cuenta="<?= $admin['id_cuenta'] ?>">
-                                <?= $admin['nombre'] ?> - <?= $admin['cuenta_nombre'] ?>
-                            </option>
-                        <?php endforeach; ?>
+                <div class="form-group">                
+                    <label for=""rol>Rol:</label>
+                    <select name="role_id" id="role_id" class="form-control" required>
+                        <option value="1">Administrador</option>
+                        <option value="2">Cobrador</option>
                     </select>
+                </div>
 
-                    <!-- Input oculto para almacenar el id_cuenta seleccionado -->
-                    <input type="hidden" name="id_cuenta" id="id_cuenta">
-                <?php else: ?>
-                    <!-- 🚀 Si el usuario es Administrador, se asigna automáticamente la cuenta activa -->
-                    <input type="hidden" name="id_cuenta" value="<?= $_SESSION['id_cuenta'] ?>">
-                <?php endif; ?>
+    <div id="admin_section" style="display: none;">
+        <div class="form-group">
+            <label>Seleccionar Administrador:</label>
+            <select name="id_admin" id="id_admin" class="form-control">
+                <option value="">Seleccionar...</option>
+                <?php foreach ($administradores as $admin): ?>
+                    <option value="<?= $admin['id_user'] ?>" data-cuenta="<?= $admin['id_cuenta'] ?>">
+                        <?= $admin['nombre'] ?> - <?= $admin['cuenta_nombre'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-                <button type="submit">Guardar</button>
+        <div class="form-group">
+            <label>Seleccionar Cuenta:</label>
+            <select name="id_cuenta" id="id_cuenta" class="form-control">
+                <option value="">Seleccionar cuenta...</option>
+                <?php foreach ($administradores as $admin): ?>
+                    <option value="<?= $admin['id_cuenta'] ?>">
+                        <?= $admin['cuenta_nombre'] ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("role_id").addEventListener("change", function() {
+            document.getElementById("admin_section").style.display = this.value == 2 ? "block" : "none";
+        });
+    </script>
+<?php elseif ($user_role == 1): ?>
+    <input type="hidden" name="id_cuenta" value="<?= $_SESSION['id_cuenta'] ?>">
+
+    <label>Rol:</label>
+    <select name="role_id" class="form-control" required>
+        <option value="2">Cobrador</option>
+    </select>
+<?php elseif ($user_role == 2): ?>
+    <input type="hidden" name="id_cuenta" value="">
+    <input type="hidden" name="role_id" value="3">
+<?php endif; ?>
+
+
+
+                <button type="submit" class="btn btn-success btn-block">Guardar</button>
             </form>
 
             <script>

@@ -165,7 +165,8 @@ function getAllPrestamos()
             p.monto_cuota,
             p.estado,
             p.duracion,
-            p.inicio_fecha
+            p.inicio_fecha,
+            p.id_rol_user
 
         FROM 
             prestamo p
@@ -311,7 +312,7 @@ function calcularFechaVencimiento($fecha_inicio, $duracion)
     return $fecha;
 }
 
-function generarCuotas($id_prestamo, $fecha_inicio, $duracion, $monto_inicial, $interes_total)
+function generarCuotas($id_prestamo, $fecha_inicio, $duracion, $monto_inicial, $interes_total, $id_cuenta)
 {
     global $conn;
 
@@ -333,10 +334,10 @@ function generarCuotas($id_prestamo, $fecha_inicio, $duracion, $monto_inicial, $
 
             // Inserta la cuota en la base de datos
             $stmt = $conn->prepare("
-                INSERT INTO cuota_prestamo (id_prestamo, numero_cuota, fecha_cuota, valor_cuota, estado) 
-                VALUES (?, ?, ?, ?, 'sin cobrar')
+                INSERT INTO cuota_prestamo (id_prestamo, numero_cuota, fecha_cuota, valor_cuota, estado, id_cuenta) 
+                VALUES (?, ?, ?, ?, 'sin cobrar', ?)
             ");
-            $stmt->bind_param("iisd", $id_prestamo, $numero_cuota, $fecha, $monto_cuota);
+            $stmt->bind_param("iisdi", $id_prestamo, $numero_cuota, $fecha, $monto_cuota, $id_cuenta);
             $stmt->execute();
 
             // Incrementa el contador de días creados

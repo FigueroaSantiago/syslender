@@ -113,6 +113,7 @@ unset($_SESSION['alerta']);  // Eliminar la alerta de la sesión después de obt
                         <a href='prestamo/editar_prestamo.php?id={$prestamo['id_prestamo']}' class='btn btn-warning btn-custom btn-sm'><i class='fas fa-edit'></i> Editar</a>
                         <a href='prestamo/eliminar_prestamo.php?id={$prestamo['id_prestamo']}' class='btn btn-danger btn-custom btn-sm'><i class='fas fa-trash-alt'></i> Eliminar</a>
                     </td>
+                    <td>{$prestamo['id_rol_user']}</td>
                 </tr>";
             }
             ?>

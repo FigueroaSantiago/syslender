@@ -32,7 +32,7 @@ $query_prestamos = "SELECT p.id_prestamo, c.nombres AS cliente_nombre, p.monto_i
                     JOIN ruta rt ON c.id_ruta = rt.id_ruta
                     JOIN rol_user ru ON rt.id_rol_user = ru.id_rol_user";
 
-if ($role_id !== 1) {
+if ($role_id !== 1 && $role_id !== 18) {
     $query_prestamos .= " WHERE ru.id_user = ? AND p.estado = 'activo'";
     $stmt_prestamos = $conn->prepare($query_prestamos);
     $stmt_prestamos->bind_param("i", $user_id);

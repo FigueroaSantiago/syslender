@@ -23,6 +23,34 @@ if ($_SESSION['role_id'] != 2 && $_SESSION['role_id'] != 1) {
     exit();
 }
 
+// Si el usuario es Administrador (1) y no tiene id_cuenta en la sesión, buscar en cuenta_admin
+if ($_SESSION['role_id'] == 1 && (!isset($_SESSION['id_cuenta']) || empty($_SESSION['id_cuenta']))) {
+    $id_admin = $_SESSION['user_id'];
+
+    // Buscar la cuenta asociada al Administrador en `cuenta_admin`
+    $stmt = $conn->prepare("SELECT id_cuenta FROM cuenta_admin WHERE id_admin = ?");
+    $stmt->bind_param("i", $id_admin);
+    $stmt->execute();
+    $stmt->bind_result($id_cuenta);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (!$id_cuenta) {
+        die("Error: No se encontró una cuenta asignada para este Administrador.");
+    }
+
+    // Asignar la cuenta a la sesión
+    $_SESSION['id_cuenta'] = $id_cuenta;
+}
+
+// Verifica que id_cuenta está correctamente asignado
+if (!isset($_SESSION['id_cuenta']) || empty($_SESSION['id_cuenta'])) {
+    die("Error: No hay cuenta activa para registrar el préstamo.");
+}
+
+$id_cuenta = $_SESSION['id_cuenta']; // Asignamos id_cuenta desde la sesión
+
+
 // Obtener los datos enviados desde el formulario
 $id_cliente = $_POST['id_cliente'] ?? null;
 $monto_inicial = $_POST['monto_inicial'] ?? null;
@@ -222,7 +250,7 @@ $stmt->close();
     $id_prestamo = $stmt->insert_id;
 
     // Generar cuotas y manejar posibles errores
-    generarCuotas($id_prestamo, $fecha_inicio, $duracion, $monto_inicial, $interes_total);
+    generarCuotas($id_prestamo, $fecha_inicio, $duracion, $monto_inicial, $interes_total, $id_cuenta);
 
     // Confirmar la transacción
     $conn->commit();
