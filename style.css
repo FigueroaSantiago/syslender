@@ -1,0 +1,19 @@
+body {
+    background-color: #f8f9fc;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card .card-body {
+    padding: 1.5rem;
+}
+
+.card .card-header {
+    background-color: transparent;
+    border-bottom: none;
+    font-size: 1rem;
+    font-weight: 600;
+}

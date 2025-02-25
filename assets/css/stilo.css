@@ -1,0 +1,94 @@
+body {
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    background-image: url(/img/1.jpg);
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+   
+    background-position: center;
+    background-size: cover;
+
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    opacity: 0.9;
+    border-radius: 8px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 2.5);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #000000;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+  
+.cedula{
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #945fc5;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 17px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.disenob{
+    padding: auto;
+    background-color: #945fc5;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 15px;
+}
+.disenob :hover{
+
+    background-color: #945fc5;
+}
+.reset{
+    background-color: #120120;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset :hover{
+    background-color: #190031;
+}
+input[type="submit"]:hover {
+    background-color: #945fc5;
+}
+.boton{
+    justify-content: right;
+}

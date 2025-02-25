@@ -1,0 +1,47 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+header {
+    /* Sin estilo adicional, sin bordes, sin sombra */
+    background-color: transparent; /* Sin color de fondo */
+    padding: 0; /* Sin espaciado */
+    box-shadow: none; /* Sin sombra */
+}
+
+.navbar {
+    background-color: transparent; /* Sin color de fondo */
+    box-shadow: none; /* Sin sombra */
+    padding: 0; /* Sin espaciado */
+}
+
+.navbar-brand {
+    display: block; /* Sin alineación ni espacio entre logo y texto */
+    font-size: 1rem; /* Tamaño de fuente básico */
+    font-weight: normal; /* Peso de fuente normal */
+    color: inherit; /* Hereda color predeterminado */
+}
+
+.navbar-brand:hover {
+    color: inherit; /* Sin cambio de color al pasar el mouse */
+}
+
+.navbar-nav .nav-link {
+    color: inherit; /* Sin color específico */
+    font-size: 1rem; /* Tamaño de fuente básico */
+    margin: 0; /* Sin márgenes adicionales */
+    display: inline; /* Elementos en línea sin espaciado */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.navbar-nav .nav-link:hover {
+    color: inherit; /* Sin cambio de color al pasar el mouse */
+}
+
+.main-content {
+    padding: 0; /* Sin espaciado */
+    margin-top: 0; /* Sin margen superior */
+    background-color: transparent; /* Sin color de fondo */
+    border-radius: 0; /* Sin bordes redondeados */
+}
