@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2025 a las 23:29:03
+-- Tiempo de generación: 26-02-2025 a las 23:08:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -152,7 +152,19 @@ CREATE TABLE `cuentas` (
 
 INSERT INTO `cuentas` (`id_cuenta`, `cod_cuenta`, `nombre`, `empresa`, `cod_sirc`, `fecha_creacion`, `fecha_vencimiento`, `estado`) VALUES
 (1, '', 'cuenta001', '', '', '2025-02-18', '2025-02-28', 'activa'),
-(2, 'CC002', 'cueta002', 'ECONTECT COL SAS', '1234543DFDD', '2025-02-18', '2025-03-15', 'activa');
+(2, 'CC002', 'cueta002', 'ECONTECT COL SAS', '1234543DFDD', '2025-02-18', '2025-03-15', 'activa'),
+(5, 'CC003', 'cuenta003', 'Clinica CLEO', '46sdfasd564', '2025-02-26', '2025-02-28', 'activa'),
+(6, 'CC003', 'cuenta003', 'Clinica CLEO', '46sdfasd564', '2025-02-26', '2025-02-28', 'activa'),
+(7, 'cuenta003', 'cuenta003', 'cuenta003', 'cuenta003', '2025-02-26', '2025-02-28', 'activa'),
+(8, 'cuenta005', 'cuenta005', 'cuenta003', 'cuenta003', '2025-02-26', '2025-02-28', 'activa'),
+(9, 'cuenta005', 'cuenta005', 'cuenta005', 'cuenta005', '2025-02-26', '2025-02-28', 'activa'),
+(10, 'cuenta006', 'cuenta006', 'cuenta006', 'cuenta006', '2025-02-26', '2025-03-26', 'activa'),
+(11, 'cuenta007', 'cuenta007', 'cuenta007', 'cuenta007', '2025-02-26', '2025-03-01', 'activa'),
+(12, 'cuentadeTito', 'cuentadeTito', 'cuentadeTito', 'cuentadeTito', '2025-02-26', '2025-03-01', 'activa'),
+(13, 'CuentadeLosCARNALES', 'CuentadeLosCARNALES', 'CuentadeLosCARNALES', 'CuentadeLosCARNALES', '2025-02-26', '2025-03-08', 'activa'),
+(14, 'CuentadeNVISTA', 'CuentadeNVISTA', 'CuentadeNVISTA', 'CuentadeNVISTA', '2025-02-26', '2025-02-27', 'activa'),
+(15, 'CuentadeNVISTA1', 'CuentadeNVISTA1', 'CuentadeNVISTA1', 'CuentadeNVISTA1', '2025-02-26', '2025-02-28', 'activa'),
+(16, 'CuentaSelect2', 'CuentaSelect2', 'CuentaSelect2', 'CuentaSelect2', '2025-02-26', '2025-03-01', 'activa');
 
 -- --------------------------------------------------------
 
@@ -172,7 +184,14 @@ CREATE TABLE `cuenta_admin` (
 INSERT INTO `cuenta_admin` (`id_admin`, `id_cuenta`) VALUES
 (87, 1),
 (87, 2),
-(88, 2);
+(88, 2),
+(118, 8),
+(119, 8),
+(120, 1),
+(121, 8),
+(125, 8),
+(134, 13),
+(134, 16);
 
 -- --------------------------------------------------------
 
@@ -460,6 +479,19 @@ INSERT INTO `rol_user` (`id_rol_user`, `id_rol`, `id_user`) VALUES
 (84, 1, 87),
 (85, 1, 88),
 (96, 1, 99),
+(111, 1, 114),
+(112, 1, 115),
+(113, 1, 116),
+(114, 1, 117),
+(115, 1, 118),
+(116, 1, 119),
+(117, 1, 120),
+(118, 1, 121),
+(122, 1, 125),
+(128, 1, 131),
+(129, 1, 132),
+(130, 1, 133),
+(131, 1, 134),
 (83, 2, 86),
 (87, 2, 90),
 (89, 2, 92),
@@ -468,6 +500,14 @@ INSERT INTO `rol_user` (`id_rol_user`, `id_rol`, `id_user`) VALUES
 (95, 2, 98),
 (97, 2, 100),
 (98, 2, 101),
+(119, 2, 122),
+(120, 2, 123),
+(121, 2, 124),
+(123, 2, 126),
+(124, 2, 127),
+(125, 2, 128),
+(126, 2, 129),
+(127, 2, 130),
 (82, 18, 85);
 
 -- --------------------------------------------------------
@@ -535,9 +575,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nombre`, `apellido`, `contacto`, `cedula`, `password`, `ultimo_login`, `estado`, `id_cuenta`) VALUES
-(85, 'Santiago', 'Figueroa', '3134369400', 1106770953, '$2y$10$jWvOHcJWaFgroOv4U5E8yOsOFHMbORtAqZClyn2QHvfTM2a0zo4Ia', '2025-02-25 21:49:43', 'activo', NULL),
+(85, 'Santiago', 'Figueroa', '3134369400', 1106770953, '$2y$10$jWvOHcJWaFgroOv4U5E8yOsOFHMbORtAqZClyn2QHvfTM2a0zo4Ia', '2025-02-26 20:29:52', 'activo', NULL),
 (86, 'Rodas', 'Rodas', '230', 213132321, '$2y$10$CMxp77EfU1hNyIqFFy0OJefRb/tBCsQ/LJMdgZvcZ2NHKRZbbbHU6', '2025-02-25 22:20:22', 'activo', NULL),
-(87, 'Mariana', 'Ortiz', '3165452311', 123432546, '$2y$10$ttrm8jSIhi/vAgG.HCaue.RNTINEuDXLXuTFSourS8bKdKKxwmTi.', '2025-02-25 22:24:06', 'activo', NULL),
+(87, 'Mariana', 'Ortiz', '3165452311', 123432546, '$2y$10$ttrm8jSIhi/vAgG.HCaue.RNTINEuDXLXuTFSourS8bKdKKxwmTi.', '2025-02-26 16:39:54', 'activo', NULL),
 (88, 'Mafe', 'Oliveros', '2315614653', 123456258, '$2y$10$GzSewEwB5UUsA0QsEB0/qepzx0omi4pGnaadrUhk5LTmr7IzPBTgO', NULL, 'activo', NULL),
 (90, 'Sandra', 'Figueroa', '5421353', 45632541, '$2y$10$0msCmbrhp0WhJUgTYpKU6uxTi.jw7o545MZJQvbLv8ghQJT/PPiEq', '2025-02-25 21:52:23', 'activo', 1),
 (92, 'Maira', 'Figueroa', '1234564', 65416523, '$2y$10$DrEbgxXstzCmaZzy9G4I.Om.i286MSkVzn4EyDZDR1FwcZ80IG7n2', '2025-02-25 02:22:53', 'activo', 1),
@@ -546,7 +586,28 @@ INSERT INTO `user` (`id_user`, `nombre`, `apellido`, `contacto`, `cedula`, `pass
 (98, 'Juan Esteban', 'Sossa', '7894654', 654852159, '$2y$10$Voo2Cp4rL17yeIB0ra7BBeSlSDwARp0cloHF9x/I4cmwt/Fq0l/62', NULL, 'activo', 1),
 (99, 'JohanG', 'GG', '12323145', 1234569512, '$2y$10$cIS.Wqindy4ARhoy04VhGeYdJsTQnxICI68wL0NeyXgCDYaSn9LZm', NULL, 'activo', NULL),
 (100, 'JOHANCG', 'CG', '32146789', 951357456, '$2y$10$BI/NVlIpmFTHzeDHT97yIO2eFEGs80vWY3laeUsBRDqTwcJVQnFCW', NULL, 'activo', 1),
-(101, 'Stiven', 'Rodas Rodas', '321654852', 753159654, '$2y$10$T7bLHeSdDOuqrCuV46GUIe7NdRiVDc1G4izZyr4ssk3Zg6pBCmUlq', NULL, 'activo', 1);
+(101, 'Stiven', 'Rodas Rodas', '321654852', 753159654, '$2y$10$T7bLHeSdDOuqrCuV46GUIe7NdRiVDc1G4izZyr4ssk3Zg6pBCmUlq', NULL, 'activo', 1),
+(114, 'Admin1', 'Admin1', '456789321', 951357486, '$2y$10$a0oE0F489AhZ0OjUvtiAM.YINzqh3H.gEtDP/aCuZ8wqHunrSx1Be', NULL, 'activo', NULL),
+(115, 'Admin2', 'Admin2', '654852159', 951265479, '$2y$10$SbZAvlnQAAbHTTFdmKBoN.Fr0Xe3WuKl4PajF.5wjJvoogRzJ8B/W', NULL, 'activo', NULL),
+(116, 'Admin3', 'ADMIN3', '321987864', 654951749, '$2y$10$kQXtjtmzV3Fx4y3tXdEFEeXCh9Q15lPFgL2/s9xFDev7HcAXO4aeW', NULL, 'activo', NULL),
+(117, 'Admin4', 'Admin4', '654851649', 351694875, '$2y$10$JvUn2s.V399d.XNGeh201O9ATogJgNYJEmSLg/wIzs0BCqwVmJRQi', NULL, 'activo', NULL),
+(118, 'Admin5', 'Admin5', '654965481', 951753846, '$2y$10$bnlA7ripM72USVx96n.FuefDwDVgwNBv3cPpLM0WcGXQ92g8aowxy', NULL, 'activo', NULL),
+(119, 'Admin6', 'Admin6', '456846913', 654963486, '$2y$10$SDn77yHb/CeitP6diYxjEe/uFvx1fi4wYgeyW/Kqmf2dHBzB60UQe', NULL, 'activo', NULL),
+(120, 'Admin7', 'Admin7', '987159874', 674913854, '$2y$10$kK/fjZEgSrZBFLu1f9h7uu/mAzjzp/MI0doVWecXH2d76B.c9Mqwe', NULL, 'activo', NULL),
+(121, 'Fernando', 'Burbano', '9468264613', 9768425234, '$2y$10$IOOc24/94q.go1FVaHVTEO0OnXrcDpGylzBWs/N.qxf7czpfB3YnC', '2025-02-26 16:09:26', 'activo', NULL),
+(122, 'Anthony', 'Zambrano', '65497549', 95176842, '$2y$10$404vKijt8sD.e37eP0Z6JOJRGciO1qsj4rjvqwWknHa2HNCGGM6BO', NULL, 'activo', 8),
+(123, 'Shaggy', 'G', '654789123', 951768426, '$2y$10$nakebENWLt2oEJsf3ZZsb.gIDOv8lXlmMNe1EocvdUgqyyTKWdwqO', NULL, 'activo', 8),
+(124, 'Akon', 'Akon', '654852195', 915735465, '$2y$10$nLfw8TmetmniLLgJIqPbcOAFmQQZ4N5VCRoJIIvBAt26OxmXK/wBu', NULL, 'activo', 8),
+(125, 'Aangie', 'K', '654978216', 39486276, '$2y$10$CKtt.5OC8ufLe3kkbPShYu3D5ww51qv1PWhOzl8MIyDac7Q7HKI1C', NULL, 'activo', NULL),
+(126, 'Angiek', 'k', '654987549', 321987462, '$2y$10$u.5ZTVfz/HJU8cnHZpv4cefFJtP7PFQJWCh9DJJTEGQPnAkG36icC', NULL, 'activo', 2),
+(127, 'Dr', 'Dree', '654951684', 153486951, '$2y$10$vfOO7V8Ck1Wz33fyUW8X1.2KswjS1TKmrGeZmgxzT3cJxYsFfjDLa', NULL, 'activo', 8),
+(128, 'Dr', 'Dree', '321654956', 1239876489, '$2y$10$B5y10oxq02RvF9NfCB4amOa2fqdgfx8jLI4n.bkRdautgba7uLFOm', NULL, 'activo', 1),
+(129, 'Damian', 'Marley', '684258491', 349816754, '$2y$10$jAhAhYrIHtQ3B/I7DY3uLeec97pex2OLCxXo5J8r.OL/97HYQJquK', NULL, 'activo', 1),
+(130, 'Natanael', 'Cano', '684741972', 349862179, '$2y$10$QbQox1pyk0HbZmlDJTDtz.ThF1S88OtKphEdc0pbu5czR7DISWxvu', '2025-02-26 16:44:02', 'activo', 1),
+(131, 'Fuerza', 'Regida', '348754215', 976481537, '$2y$10$wtLO4eHCofN.1VMjTWJiYurkUdFa1rA2jGExbGAyOsafsWmRIYeOS', NULL, 'activo', NULL),
+(132, 'Junior', 'H', '674931485', 379154682, '$2y$10$k8wrXao.J3ixfS4Vf3Viseu4qsTuqwdaZ1Z/AtQQPgjiLjXXmDDte', '2025-02-26 16:53:26', 'activo', NULL),
+(133, 'Tito', 'Double', '349846517', 349846517, '$2y$10$3MiSxpdNMO8eoSD.Rp4N1eyFT5kPJhb9.gHFnWdx3bSbxOYv8TAUC', NULL, 'activo', NULL),
+(134, 'Los Dos', 'Carnales', '954786135', 954786135, '$2y$10$Wima1F2QxLcmkB7e6HoTu.a1osWr5tkjZgsEMp09UEGdBi92baZlG', NULL, 'activo', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -740,7 +801,7 @@ ALTER TABLE `cuadres_diarios`
 -- AUTO_INCREMENT de la tabla `cuentas`
 --
 ALTER TABLE `cuentas`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `cuota_prestamo`
@@ -800,7 +861,7 @@ ALTER TABLE `rol_permisos`
 -- AUTO_INCREMENT de la tabla `rol_user`
 --
 ALTER TABLE `rol_user`
-  MODIFY `id_rol_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+  MODIFY `id_rol_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT de la tabla `ruta`
@@ -818,7 +879,7 @@ ALTER TABLE `tipo_gastos`
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- Restricciones para tablas volcadas
