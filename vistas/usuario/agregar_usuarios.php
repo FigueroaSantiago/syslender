@@ -81,6 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+
+
     // 🚀 Insertar el usuario con su cuenta asignada
     try {
         $conn->begin_transaction();
@@ -99,7 +101,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
 
         $conn->commit();
+
         $_SESSION['response'] = ['status' => 'success', 'message' => 'Usuario registrado exitosamente.'];
+
+
+        if ($role_id == 1) {
+            $_SESSION['admin_creado'] = true;
+            $_SESSION['id_admin_creado'] = $user_id;
+        }
+
+       
     } catch (Exception $e) {
         $conn->rollback();
         $_SESSION['response'] = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()];
@@ -108,10 +119,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: agregar_usuarios.php");
     exit();
 }
+
+
+
 ?>
-
-
-
 
 
 
@@ -306,6 +317,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        <?php if (isset($_SESSION['response'])): ?>
+            Swal.fire({
+                icon: '<?php echo $_SESSION['response']['status']; ?>',
+                title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
+                text: '<?php echo $_SESSION['response']['message']; ?>'
+            }).then(() => {
+                <?php if (isset($_SESSION['admin_creado']) && $_SESSION['admin_creado'] === true): ?>
+                    // 🔹 Si el usuario es Administrador, mostramos la segunda alerta después
+                    Swal.fire({
+                        title: "¿Cómo deseas asociar este Administrador?",
+                        text: "Selecciona una opción para continuar.",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonText: "Asociar a una cuenta",
+                        cancelButtonText: "Crear nueva cuenta"
+                    }).then((result) => {
+                        <?php unset($_SESSION['admin_creado']); ?>
+                        if (result.isConfirmed) {
+                            window.location.href = "asociar_cuenta.php"; // Redirigir a vista de asociación
+                        } else {
+                            window.location.href = "crear_cuenta.php"; // Redirigir a vista de creación
+                        }
+                    });
+                <?php else: ?>
+                    // 🔹 Si el usuario NO es Administrador, redirigir normalmente
+                    window.location.href = '../usuarios.php';
+                <?php endif; ?>
+            });
+            <?php unset($_SESSION['response']); ?>
+        <?php endif; ?>
+    });
+</script>
+
+
+
+
+
+    <script>
         // Validaciones del lado del cliente
         document.querySelector('form').addEventListener('submit', function(event) {
             var nombre = document.getElementById('nombre').value.trim();
@@ -371,4 +421,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 </body>
 
-</html>
+</html> 
