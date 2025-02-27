@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cod_cuenta']) && isset
                 title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
                 text: '<?php echo $_SESSION['response']['message']; ?>'
             }).then(() => {
-                window.location.href = "agregar_usuarios.php"; // 🔄 Redirige de vuelta a la lista de usuarios
+                window.location.href = "../usuarios.php"; // 🔄 Redirige de vuelta a la lista de usuarios
             });
             <?php unset($_SESSION['response']); ?>
         <?php endif; ?>

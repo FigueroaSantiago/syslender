@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_role = $_SESSION['role_id']; // Rol del usuario que está creando el usuario
 
     // 🚀 Validar la creación de usuarios según el rol del creador
-    if ($user_role == 18) { 
+    if ($user_role == 18) {
         // 🚀 Gestor puede crear Administradores y Cobradores
         if ($role_id == 1) {
             $id_cuenta = null; // Un Administrador no necesita cuenta al crearse
@@ -41,8 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: agregar_usuarios.php");
             exit();
         }
-
-    } elseif ($user_role == 1) { 
+    } elseif ($user_role == 1) {
         // 🚀 Administrador solo puede crear Cobradores y Clientes
         if ($role_id == 2) {
             $id_cuenta = $_SESSION['id_cuenta']; // 🚀 Cobradores se asocian a su cuenta automáticamente
@@ -53,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: agregar_usuarios.php");
             exit();
         }
-
     } elseif ($user_role == 2) {
         // 🚀 Cobrador solo puede crear Clientes
         if ($role_id != 3) {
@@ -109,8 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['admin_creado'] = true;
             $_SESSION['id_admin_creado'] = $user_id;
         }
-
-       
     } catch (Exception $e) {
         $conn->rollback();
         $_SESSION['response'] = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()];
@@ -243,56 +239,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <?php if ($user_role == 18): ?>
-                <div class="form-group">                
-                    <label for=""rol>Rol:</label>
-                    <select name="role_id" id="role_id" class="form-control" required>
-                        <option value="1">Administrador</option>
+                    <div class="form-group">
+                        <label for="" rol>Rol:</label>
+                        <select name="role_id" id="role_id" class="form-control" required>
+                            <option value="1">Administrador</option>
+                            <option value="2">Cobrador</option>
+                        </select>
+                    </div>
+
+                    <div id="admin_section" style="display: none;">
+                        <div class="form-group">
+                            <label>Seleccionar Administrador:</label>
+                            <select name="id_admin" id="id_admin" class="form-control">
+                                <option value="">Seleccionar...</option>
+                                <?php foreach ($administradores as $admin): ?>
+                                    <option value="<?= $admin['id_user'] ?>" data-cuenta="<?= $admin['id_cuenta'] ?>">
+                                        <?= $admin['nombre'] ?> - <?= $admin['cuenta_nombre'] ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Seleccionar Cuenta:</label>
+                            <select name="id_cuenta" id="id_cuenta" class="form-control">
+                                <option value="">Seleccionar cuenta...</option>
+                                <?php foreach ($administradores as $admin): ?>
+                                    <option value="<?= $admin['id_cuenta'] ?>">
+                                        <?= $admin['cuenta_nombre'] ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.getElementById("role_id").addEventListener("change", function() {
+                            document.getElementById("admin_section").style.display = this.value == 2 ? "block" : "none";
+                        });
+                    </script>
+                <?php elseif ($user_role == 1): ?>
+                    <input type="hidden" name="id_cuenta" value="<?= $_SESSION['id_cuenta'] ?>">
+
+                    <label>Rol:</label>
+                    <select name="role_id" class="form-control" required>
                         <option value="2">Cobrador</option>
                     </select>
-                </div>
-
-    <div id="admin_section" style="display: none;">
-        <div class="form-group">
-            <label>Seleccionar Administrador:</label>
-            <select name="id_admin" id="id_admin" class="form-control">
-                <option value="">Seleccionar...</option>
-                <?php foreach ($administradores as $admin): ?>
-                    <option value="<?= $admin['id_user'] ?>" data-cuenta="<?= $admin['id_cuenta'] ?>">
-                        <?= $admin['nombre'] ?> - <?= $admin['cuenta_nombre'] ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Seleccionar Cuenta:</label>
-            <select name="id_cuenta" id="id_cuenta" class="form-control">
-                <option value="">Seleccionar cuenta...</option>
-                <?php foreach ($administradores as $admin): ?>
-                    <option value="<?= $admin['id_cuenta'] ?>">
-                        <?= $admin['cuenta_nombre'] ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById("role_id").addEventListener("change", function() {
-            document.getElementById("admin_section").style.display = this.value == 2 ? "block" : "none";
-        });
-    </script>
-<?php elseif ($user_role == 1): ?>
-    <input type="hidden" name="id_cuenta" value="<?= $_SESSION['id_cuenta'] ?>">
-
-    <label>Rol:</label>
-    <select name="role_id" class="form-control" required>
-        <option value="2">Cobrador</option>
-    </select>
-<?php elseif ($user_role == 2): ?>
-    <input type="hidden" name="id_cuenta" value="">
-    <input type="hidden" name="role_id" value="3">
-<?php endif; ?>
+                <?php elseif ($user_role == 2): ?>
+                    <input type="hidden" name="id_cuenta" value="">
+                    <input type="hidden" name="role_id" value="3">
+                <?php endif; ?>
 
 
 
@@ -317,39 +313,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        <?php if (isset($_SESSION['response'])): ?>
-            Swal.fire({
-                icon: '<?php echo $_SESSION['response']['status']; ?>',
-                title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
-                text: '<?php echo $_SESSION['response']['message']; ?>'
-            }).then(() => {
-                <?php if (isset($_SESSION['admin_creado']) && $_SESSION['admin_creado'] === true): ?>
-                    // 🔹 Si el usuario es Administrador, mostramos la segunda alerta después
-                    Swal.fire({
-                        title: "¿Cómo deseas asociar este Administrador?",
-                        text: "Selecciona una opción para continuar.",
-                        icon: "question",
-                        showCancelButton: true,
-                        confirmButtonText: "Asociar a una cuenta",
-                        cancelButtonText: "Crear nueva cuenta"
-                    }).then((result) => {
-                        <?php unset($_SESSION['admin_creado']); ?>
-                        if (result.isConfirmed) {
-                            window.location.href = "asociar_cuenta.php"; // Redirigir a vista de asociación
-                        } else {
-                            window.location.href = "crear_cuenta.php"; // Redirigir a vista de creación
-                        }
-                    });
-                <?php else: ?>
-                    // 🔹 Si el usuario NO es Administrador, redirigir normalmente
-                    window.location.href = '../usuarios.php';
-                <?php endif; ?>
-            });
-            <?php unset($_SESSION['response']); ?>
-        <?php endif; ?>
-    });
-</script>
+        document.addEventListener("DOMContentLoaded", function() {
+            <?php if (isset($_SESSION['response'])): ?>
+                Swal.fire({
+                    icon: '<?php echo $_SESSION['response']['status']; ?>',
+                    title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
+                    text: '<?php echo $_SESSION['response']['message']; ?>'
+                }).then(() => {
+                    <?php if (isset($_SESSION['admin_creado']) && $_SESSION['admin_creado'] === true): ?>
+                        // 🔹 Si el usuario es Administrador, mostramos la segunda alerta después
+                        Swal.fire({
+                            title: "¿Cómo deseas asociar este Administrador?",
+                            text: "Selecciona una opción para continuar.",
+                            icon: "question",
+                            showCancelButton: true,
+                            confirmButtonText: "Asociar a una cuenta",
+                            cancelButtonText: "Crear nueva cuenta"
+                        }).then((result) => {
+                            <?php unset($_SESSION['admin_creado']); ?>
+                            if (result.isConfirmed) {
+                                window.location.href = "asociar_cuenta.php"; // Redirigir a vista de asociación
+                            } else {
+                                window.location.href = "crear_cuenta.php"; // Redirigir a vista de creación
+                            }
+                        });
+                    <?php else: ?>
+                        // 🔹 Si el usuario NO es Administrador, redirigir normalmente
+                        window.location.href = '../usuarios.php';
+                    <?php endif; ?>
+                });
+                <?php unset($_SESSION['response']); ?>
+            <?php endif; ?>
+        });
+    </script>
 
 
 
@@ -421,4 +417,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 </body>
 
-</html> 
+</html>

@@ -217,5 +217,11 @@ function tienePermiso($seccion, $permisos, $id_rol) {
             </div>
         </div>
     </nav>
+    <!-- jQuery (Necesario para Bootstrap 4) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

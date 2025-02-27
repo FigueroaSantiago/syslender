@@ -242,7 +242,7 @@ while ($row = $result->fetch_assoc()) {
 
 <body>
 
-    <div class="container mt-4">
+    <div class="container mt-5">
         <!-- Encabezado con el nombre del usuario y su rol -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="mb-0">Dashboard</h1>
@@ -269,8 +269,9 @@ while ($row = $result->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-
+            
             <!-- Tarjetas para las métricas principales -->
+             <!--
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
@@ -285,9 +286,10 @@ while ($row = $result->fetch_assoc()) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!-- Tarjeta para el número de rutas -->
+             <!--
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
@@ -297,14 +299,15 @@ while ($row = $result->fetch_assoc()) {
                                 <div class="h5 mb-0 font-weight-bold text-gray-800"><?= htmlspecialchars($totalrutas) ?></div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-road fa-2x text-gray-300"></i> <!-- Icono de ruta -->
+                                <i class="fas fa-road fa-2x text-gray-300"></i> 
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Tarjeta para los préstamos activos -->
+             <!--
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
@@ -317,14 +320,15 @@ while ($row = $result->fetch_assoc()) {
                                 <div class="h5 mb-0 font-weight-bold text-gray-800"><?= htmlspecialchars($totalPrestamos) ?></div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i> <!-- Icono de dinero -->
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <!-- Tarjeta para el total de la cartera (revisar que esté relacionado con los gastos correctos) -->
+             <!--
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
@@ -334,14 +338,16 @@ while ($row = $result->fetch_assoc()) {
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">$<?= htmlspecialchars($totalGastos) ?></div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-coins fa-2x text-gray-300"></i> <!-- Icono de monedas -->
+                                <i class="fas fa-coins fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
+
         <!-- Gráficas -->
+         <!--
         <div class="row">
             <div class="col-lg-6 mb-4">
                 <div class="card shadow mb-4">
@@ -368,9 +374,10 @@ while ($row = $result->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <!-- Tabla de Resumen -->
+         <!--
         <div class="row">
             <div class="col-lg-12 mb-4">
                 <div class="card shadow mb-4">
@@ -403,7 +410,7 @@ while ($row = $result->fetch_assoc()) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
 
 

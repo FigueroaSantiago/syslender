@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_admin']) && isset($
                 title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
                 text: '<?php echo $_SESSION['response']['message']; ?>'
             }).then(() => {
-                window.location.href = "agregar_usuarios.php";
+                window.location.href = "../usuarios.php";
             });
             <?php unset($_SESSION['response']); ?>
         <?php endif; ?>

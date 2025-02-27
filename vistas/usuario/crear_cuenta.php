@@ -3,6 +3,7 @@ include '../../includes/header2.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +59,7 @@ include '../../includes/header2.php';
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-5">
         <div class="form-container">
@@ -95,18 +97,19 @@ include '../../includes/header2.php';
         </div>
     </div>
     <?php if (isset($_SESSION['response'])) : ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        Swal.fire({
-            icon: '<?php echo $_SESSION['response']['status']; ?>',
-            title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
-            text: '<?php echo $_SESSION['response']['message']; ?>'
-        }).then(() => {
-            window.location.href = 'crear_cuenta.php';
-        });
-    </script>
-    <?php unset($_SESSION['response']); ?>
-<?php endif; ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: '<?php echo $_SESSION['response']['status']; ?>',
+                title: '<?php echo ucfirst($_SESSION['response']['status']); ?>',
+                text: '<?php echo $_SESSION['response']['message']; ?>'
+            }).then(() => {
+                window.location.href = 'agregar_usuarios.php';
+            });
+        </script>
+        <?php unset($_SESSION['response']); ?>
+    <?php endif; ?>
 
 </body>
+
 </html>
